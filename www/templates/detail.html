@@ -2,10 +2,11 @@
       <ion-header-bar class="bar-royal">
         <h1 class="title">{{currentChoice.name}}</h1>
       </ion-header-bar>
-  <ion-content class="has-header padding" style='background:#262239' on-swipe-left="back()">
+  <ion-content class="has-header padding content-color">
     <h3>{{currentChoice.address.street}}, {{currentChoice.address.city}}</h3>
-    <h3>{{currentChoice.phone_number}}<h3>
-    <h3>{{currentChoice.website}}<h3>
+    <h3>{{currentChoice.phone_number}}</h3>
+    <h3><a href="{{displayUrl}}">{{displayUrl}}</a></h3>
+    <h3 ng-show="hours">Business Hours: {{hours}}</h3>
     <div ng-repeat="tag in currentChoice.tags">
     	<h3>{{tag.name}}</h3>
     </div>

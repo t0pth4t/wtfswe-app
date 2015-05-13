@@ -29,10 +29,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','n
   // Each state's controller can be found in controllers.js
   $stateProvider
 
-
-
-
-
     // Each tab has its own nav history stack:
     .state('whattoeat', {
           url:'/',

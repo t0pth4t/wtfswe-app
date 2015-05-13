@@ -1,9 +1,8 @@
 angular.module('starter.services', [])
 .constant('googleApiKey', '')
 .constant('cityGridApiKey', '')
-.factory('PlacesApi', function($http,lodash, ApiEndpoint) {
-  var choice = {},
-  places = [];
+.factory('PlacesApi', function($http,lodash, cityGridApiKey) {
+  var places = [];
 
   return {
     getPlaces: function(lat,long,radius) {      
@@ -17,7 +16,7 @@ angular.module('starter.services', [])
       });
     },
     getCityGridPlaceDetail: function(placeId){
-
+      return $http.get('https://api.citygridmedia.com/content/places/v2/detail?format=json&id='+placeId+'&id_type=cs&placement=search_page&client_ip=123.4.56.78&publisher='+cityGridApiKey);
     }
   };
 })

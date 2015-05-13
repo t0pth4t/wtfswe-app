@@ -1,99 +1,114 @@
 angular.module('starter.controllers', [])
 
 
-.controller('WhatToEatCtrl',function($scope, $http, $ionicLoading,$location,$localstorage, $q, lodash,PlacesApi ){
-		$scope.distances = [
-		{label:'5 miles',val:5},
-		{label:'10 miles',val:10},
-		{label:'25 miles', val:25}
-	];
-	$scope.getNewPlaces = false;
+.controller('WhatToEatCtrl',function($scope, $http, $ionicLoading,$location,$localstorage, $q, lodash,PlacesApi ) {
 
-	$scope.onSwipeRight = function(){
-		$location.path( '/detail.html' );
-	};
+        $scope.onSwipeRight = function () {
+            $location.path('/detail.html');
+        };
 
-	$scope.getMeters = function(miles){
-		return miles*1609.344;
-	};
+        $scope.getMeters = function (miles) {
+            return miles * 1609.344;
+        };
 
-    $scope.showLoading = function() {
-		$ionicLoading.show({
-			template: 'Loading...'
-		});
-	};
-	$scope.hide = function(){
-		$ionicLoading.hide();
-		$scope.$broadcast('scroll.refreshComplete');
-	};
+        $scope.showLoading = function () {
+            $ionicLoading.show({
+                template: 'Loading...'
+            });
+        };
+        $scope.hide = function () {
+            $ionicLoading.hide();
+            $scope.$broadcast('scroll.refreshComplete');
+        };
 
-	$scope.update = function(selected){
-		$scope.selected = selected.val;
-		$scope.getNewPlaces = true;
-	};
+        $scope.distanceChanged = function (selected) {
+            $scope.selected = selected.val;
+            $localstorage.setObject('distanceOption', selected);
+            $scope.getNewPlaces = true;
+        };
 
-	$scope.nextChoice = function(){
-		if($scope.getNewPlaces){
-			$scope.getPlaces($scope.selected);
-			$scope.getNewPlaces = false;
-		}
-		
-		$scope.choice = $scope.getNextChoice();
-	};
+        $scope.nextChoice = function () {
+            if ($scope.getNewPlaces) {
+                $scope.getPlaces($scope.selected);
+                $scope.getNewPlaces = false;
+            }
 
-	$scope.getPlaces = function(miles){
-		$scope.showLoading();
-		navigator.geolocation.getCurrentPosition(function(pos) {
-	         	
-        	var lat = pos.coords.latitude,
-        	long =  pos.coords.longitude;
+            $scope.choice = $scope.getNextChoice();
+        };
 
-			var results = PlacesApi.getCityGridPlaces(lat,long,miles);
-			$q.all(results).then(function(data){
-				$scope.hide();
-				var places = lodash.flatten(lodash.map(data, function(d){return d.data.results.locations;}));
-				$localstorage.setObject('places',places);
-				$localstorage.setObject('choices',places.slice());
-				$scope.choice = $scope.getNextChoice();
-			}, function (error) {
-				$scope.hide();
-				alert('Unable to get resturaunts!');
-    			console.log(error);
-			}); 
-        }, function(error) {
-          $scope.hide();
-          alert('Unable to get location: ' + error.message);
-        });
-	};
+        $scope.getPlaces = function (miles) {
+            $scope.showLoading();
+            navigator.geolocation.getCurrentPosition(function (pos) {
 
-	$scope.getNextChoice = function(){
-		var choices = $localstorage.getObject('choices');
-		if(choices.length === 0){
-			choices = $localstorage.getObject('places').slice();
-		}
-		shuffle(choices);
-		var choice = choices.pop();
-		$localstorage.setObject('choice',choice);
-		$localstorage.setObject('choices',choices);
-		return choice;
-	};
+                var lat = pos.coords.latitude,
+                    long = pos.coords.longitude;
 
-	var places = $localstorage.getObject('places');
+                var results = PlacesApi.getCityGridPlaces(lat, long, miles);
+                $q.all(results).then(function (data) {
+                    $scope.hide();
+                    var places = lodash.flatten(lodash.map(data, function (d) {
+                        return d.data.results.locations;
+                    }));
+                    $localstorage.setObject('places', places);
+                    $localstorage.setObject('choices', places.slice());
+                    $scope.choice = $scope.getNextChoice();
+                }, function (error) {
+                    $scope.hide();
+                    alert('Unable to get resturaunts!');
+                    console.log(error);
+                });
+            }, function (error) {
+                $scope.hide();
+                alert('Unable to get location: ' + error.message);
+            });
+        };
 
-	if(!places || places.length === 0){
-		$scope.getPlaces($scope.selected);	
-	}else{
-		$scope.choice = $localstorage.getObject('choice');
-	}
-	
+        $scope.getNextChoice = function () {
+            var choices = $localstorage.getObject('choices');
+            if (choices.length === 0) {
+                choices = $localstorage.getObject('places').slice();
+            }
+            shuffle(choices);
+            var choice = choices.pop();
+            $localstorage.setObject('choice', choice);
+            $localstorage.setObject('choices', choices);
+            return choice;
+        };
 
-})
-.controller('ChoiceDetailCtrl',function($scope, $location, $localstorage, PlacesApi ){
-	$scope.currentChoice = $localstorage.getObject('choice');
-	$scope.back = function(){
-		$location.path( '/whattoeat.html' );
-	};
-});
+        var places = $localstorage.getObject('places');
+        $scope.distances = [
+            {label: '5 miles', val: 5, id: 0},
+            {label: '10 miles', val: 10, id: 1},
+            {label: '25 miles', val: 25, id: 2}
+        ];
+        $scope.selected = $localstorage.getObject('distanceOption') || $scope.distances[1];
+
+        $scope.getNewPlaces = false;
+        if (!places || places.length === 0) {
+            $scope.getPlaces($scope.selected);
+        } else {
+            $scope.choice = $localstorage.getObject('choice');
+        }
+
+
+    })
+.controller('ChoiceDetailCtrl',function($scope, $location, $localstorage,PlacesApi ) {
+        $scope.currentChoice = $localstorage.getObject('choice');
+        PlacesApi.getCityGridPlaceDetail($scope.currentChoice.id)
+            .success(function (data) {
+                $scope.detail = data.locations[0];
+                if($scope.detail.contact_info){
+                    $scope.displayUrl = $scope.detail.contact_info.display_url || null;
+                }
+                $scope.hours = $scope.detail.business_hours || null;
+            })
+            .error(function (data) {
+                console.log(data);
+            });
+        $scope.back = function () {
+            $location.path('/whattoeat.html');
+        };
+    });
 
 
 
