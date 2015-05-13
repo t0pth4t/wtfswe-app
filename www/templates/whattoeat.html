@@ -1,0 +1,28 @@
+    <ion-pane>
+      <ion-header-bar class="bar-royal">
+        <h1 class="title">Where the F*** Should We Eat?!?!</h1>
+      </ion-header-bar>
+  <ion-content class="has-header padding" style='background:#262239' on-swipe-right="onSwipeRight()">
+
+    <h2 class="choice">How about <a href="#detail">{{choice.name}}?</a></h2>
+
+    	<h3>{{choice.address.street}}, {{choice.address.city}}</h3>
+    	<h3 ng-hide="!choice.rating">Rating: {{choice.rating}}</h3>
+
+
+    <button class="button button-full button-royal button-large" ng-click='nextChoice()'>Nah, not today.</button>
+    <div class="list">
+
+  <label class="item item-input item-select">
+    <div class="input-label">
+      Distance
+    </div>
+<select ng-options="distance.label for distance in distances" 
+   ng-model="selected" ng-change="update(selected)" ng-init="selected = distances[1]"></select>
+  </label>
+     
+</div>
+<ion-refresher pulling-text="Pull to refresh..." on-refresh="getPlaces()"></ion-refresher>
+
+  </ion-content>
+ </ion-pane>

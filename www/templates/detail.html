@@ -1,0 +1,17 @@
+    <ion-pane>
+      <ion-header-bar class="bar-royal">
+        <h1 class="title">{{currentChoice.name}}</h1>
+      </ion-header-bar>
+  <ion-content class="has-header padding" style='background:#262239' on-swipe-left="back()">
+    <h3>{{currentChoice.address.street}}, {{currentChoice.address.city}}</h3>
+    <h3>{{currentChoice.phone_number}}<h3>
+    <h3>{{currentChoice.website}}<h3>
+    <div ng-repeat="tag in currentChoice.tags">
+    	<h3>{{tag.name}}</h3>
+    </div>
+    <img ng-src='{{currentChoice.image}}' width="250" height="250" ng-hide="!currentChoice.image"/>
+    <button class="button button-full button-royal button-large" ng-click='back()'>
+  		Back
+	</button>
+  </ion-content>
+</ion-pane>
