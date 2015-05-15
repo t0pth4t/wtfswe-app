@@ -7,3 +7,12 @@ h1, h2, h3 {
 .content-color {
 	background: #262239;
 }
+
+#map {
+	width: 100%;
+	height: 25%;
+}
+
+.scroll {
+	height: 100%;
+}
