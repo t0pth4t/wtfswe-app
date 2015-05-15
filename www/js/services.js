@@ -1,8 +1,7 @@
 angular.module('starter.services', [])
 .constant('googleApiKey', '')
 .constant('cityGridApiKey', '')
-.factory('PlacesApi', function($http,lodash, cityGridApiKey) {
-  var places = [];
+.factory('PlacesApi', function($http, lodash, cityGridApiKey) {
 
   return {
     getPlaces: function(lat,long,radius) {      

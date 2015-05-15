@@ -22,6 +22,28 @@
           </label>
 
       </div>
+      <h3>We're feelin' like...</h3>
+
+
+          <ul class="list">
+          <li class="item item-toggle" ng-repeat="option in foodOptions">
+              {{option}}
+              <label class="toggle toggle-assertive">
+              <input
+                      type="checkbox"
+                      name="selectedFoods[]"
+                      value="{{option}}"
+                      ng-checked="selection.indexOf(option) > -1"
+                      ng-click="toggleSelection(option)"
+                      >
+                  <div class="track">
+                      <div class="handle"></div>
+                  </div>
+              </label>
+          </li>
+          </ul>
+
+      <h3 ng-repeat="selected in selectedFoods">{{selected}}</h3>
       <ion-refresher pulling-text="Pull to refresh..." on-refresh="getPlaces()"></ion-refresher>
 
   </ion-content>

@@ -3,10 +3,6 @@ angular.module('starter.controllers', [])
 
 .controller('WhatToEatCtrl',function($scope, $http, $ionicLoading,$location,$localstorage, $q, lodash,PlacesApi ) {
 
-        $scope.onSwipeRight = function () {
-            $location.path('/detail.html');
-        };
-
         $scope.getMeters = function (miles) {
             return miles * 1609.344;
         };
@@ -54,7 +50,7 @@ angular.module('starter.controllers', [])
                     $scope.choice = $scope.getNextChoice();
                 }, function (error) {
                     $scope.hide();
-                    alert('Unable to get resturaunts!');
+                    alert('Unable to get restaurants!');
                     console.log(error);
                 });
             }, function (error) {
@@ -75,12 +71,28 @@ angular.module('starter.controllers', [])
             return choice;
         };
 
+        $scope.toggleSelection = function toggleSelection(option) {
+            var idx = $scope.selectedFoods.indexOf(option);
+
+            // is currently selected
+            if (idx > -1) {
+                $scope.selectedFoods.splice(idx, 1);
+            }
+
+            // is newly selected
+            else {
+                $scope.selectedFoods.push(option);
+            }
+        };
+
         var places = $localstorage.getObject('places');
         $scope.distances = [
             {label: '5 miles', val: 5, id: 0},
             {label: '10 miles', val: 10, id: 1},
             {label: '25 miles', val: 25, id: 2}
         ];
+        $scope.foodOptions = ['Chinese','Italian','Mexican','American'];
+        $scope.selectedFoods = [];
         $scope.selected = $localstorage.getObject('distanceOption') || $scope.distances[1];
 
         $scope.getNewPlaces = false;
@@ -92,7 +104,7 @@ angular.module('starter.controllers', [])
 
 
     })
-.controller('ChoiceDetailCtrl',function($scope, $location, $localstorage,PlacesApi ) {
+.controller('ChoiceDetailCtrl',function($scope, $location, $localstorage, PlacesApi ) {
         $scope.currentChoice = $localstorage.getObject('choice');
         PlacesApi.getCityGridPlaceDetail($scope.currentChoice.id)
             .success(function (data) {
