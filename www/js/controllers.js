@@ -132,7 +132,7 @@ angular.module('starter.controllers', [])
                 mapOptions);
 
 
-            $scope.googleMapsLink = "https://maps.google.com/?q=" +  $scope.currentChoice.address.street+", "+ $scope.currentChoice.address.city+", "+$scope.currentChoice.address.state+"";
+            $scope.googleMapsLink = "geo:0,0?q=" +  $scope.currentChoice.address.street+", "+ $scope.currentChoice.address.city+", "+$scope.currentChoice.address.state+"";
             var contentString = "<div><a href='"+$scope.googleMapsLink+"' target='_blank'>Driving Directions</a></div>";
             var compiled = $compile(contentString)($scope);
 
