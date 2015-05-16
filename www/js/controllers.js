@@ -2,7 +2,26 @@ angular.module('starter.controllers', [])
 
 
 .controller('WhatToEatCtrl',function($scope, $http, $ionicLoading,$location,$localstorage, $q, lodash,PlacesApi ) {
+        function shuffle(array) {
+            var currentIndex = array.length,
+                temporaryValue,
+                randomIndex;
 
+            // While there remain elements to shuffle...
+            while (0 !== currentIndex) {
+
+                // Pick a remaining element...
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+
+                // And swap it with the current element.
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+            }
+
+            return array;
+        }
         $scope.getMeters = function (miles) {
             return miles * 1609.344;
         };
@@ -72,17 +91,15 @@ angular.module('starter.controllers', [])
         };
 
         $scope.toggleSelection = function toggleSelection(option) {
-            var idx = $scope.selectedFoods.indexOf(option);
+            var indexOfOption = $scope.selectedFoods.indexOf(option);
 
-            // is currently selected
-            if (idx > -1) {
-                $scope.selectedFoods.splice(idx, 1);
+            if (indexOfOption !== -1) {
+                $scope.selectedFoods.splice(indexOfOption, 1);
             }
-
-            // is newly selected
             else {
                 $scope.selectedFoods.push(option);
             }
+
         };
 
         var places = $localstorage.getObject('places');
@@ -154,49 +171,6 @@ angular.module('starter.controllers', [])
         }
 
         initialize();
-        $scope.centerOnMe = function() {
-            if(!$scope.map) {
-                return;
-            }
 
-            $scope.loading = $ionicLoading.show({
-                content: 'Getting current location...',
-                showBackdrop: false
-            });
-
-            navigator.geolocation.getCurrentPosition(function(pos) {
-                $scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
-                $scope.loading.hide();
-            }, function(error) {
-                alert('Unable to get location: ' + error.message);
-            });
-        };
-
-        $scope.clickTest = function() {
-            alert('Example of infowindow with ng-click')
-        };
 
     });
-
-
-
-function shuffle(array) {
-  var currentIndex = array.length,
-   temporaryValue,
-   randomIndex;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-}
