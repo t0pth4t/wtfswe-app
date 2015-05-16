@@ -131,8 +131,9 @@ angular.module('starter.controllers', [])
             var map = new google.maps.Map(document.getElementById("map"),
                 mapOptions);
 
-            //Marker + infowindow + angularjs compiled ng-click
-            var contentString = "<div><a ng-click='clickTest()'>Click me!</a></div>";
+
+            $scope.googleMapsLink = "https://maps.google.com/?q=" +  $scope.currentChoice.address.street+", "+ $scope.currentChoice.address.city+", "+$scope.currentChoice.address.state+"";
+            var contentString = "<div><a href='"+$scope.googleMapsLink+"' target='_blank'>Driving Directions</a></div>";
             var compiled = $compile(contentString)($scope);
 
             var infowindow = new google.maps.InfoWindow({

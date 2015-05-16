@@ -1,11 +1,14 @@
 /* Empty. Add your own CSS if you like */
-h1, h2, h3 {
-	color:#FFFFFF;
+.main-content h1,
+.main-content h2,
+.main-content h3,
+.main-content a{
+	color: #D2C6FB;
 	text-align: center;
 }
 
 .content-color {
-	background: #262239;
+	background: #522CCA;
 }
 
 #map {

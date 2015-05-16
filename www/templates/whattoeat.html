@@ -4,11 +4,11 @@
   </ion-header-bar>
 
   <ion-content class="has-header padding content-color">
-
+    <div class="main-content">
       <h2 class="choice">How about <a href="#detail">{{choice.name}}?</a></h2>
 
-      <h3>{{choice.address.street}}, {{choice.address.city}}</h3>
-      <h3 ng-hide="!choice.rating">Rating: {{choice.rating}}</h3>
+      <!--<h3>{{choice.address.street}}, {{choice.address.city}}</h3>-->
+      <!--<h3 ng-hide="!choice.rating">Rating: {{choice.rating}}</h3>-->
         {{distanceOption}}
       <button class="button button-full button-royal button-large" ng-click='nextChoice()'>Nah, not today.</button>
       <div class="list">
@@ -28,7 +28,7 @@
           <ul class="list">
           <li class="item item-toggle" ng-repeat="option in foodOptions">
               {{option}}
-              <label class="toggle toggle-assertive">
+              <label class="toggle toggle-royal">
               <input
                       type="checkbox"
                       name="selectedFoods[]"
@@ -42,9 +42,7 @@
               </label>
           </li>
           </ul>
-
-      <h3 ng-repeat="selected in selectedFoods">{{selected}}</h3>
       <ion-refresher pulling-text="Pull to refresh..." on-refresh="getPlaces()"></ion-refresher>
-
+    </div>
   </ion-content>
 </ion-pane>

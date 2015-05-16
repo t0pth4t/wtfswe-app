@@ -1,17 +1,46 @@
     <ion-pane>
       <ion-header-bar class="bar-royal">
-        <h1 class="title">{{currentChoice.name}}</h1>
+        <h1 class="title">Where the F*** Should We Eat?!?!</h1>
       </ion-header-bar>
   <ion-content class="has-header padding content-color">
 
-    <h3>{{currentChoice.address.street}}, {{currentChoice.address.city}}</h3>
-    <h3>{{currentChoice.phone_number}}</h3>
-    <h3><a href="{{displayUrl}}">{{displayUrl}}</a></h3>
-    <h3 ng-show="hours">Business Hours: {{hours}}</h3>
-    <div ng-repeat="tag in currentChoice.tags">
-    	<h3>{{tag.name}}</h3>
+
+
+    <div class="list card">
+
+      <div class="item item-avatar">
+        <img  ng-src='{{currentChoice.image}}' ng-hide='!currentChoice.image'>
+
+        <h2>{{currentChoice.name}}</h2>
+
+
+        <p><a href="{{displayUrl}}">{{displayUrl}}</a></p>
+      </div>
+
+
+
+      <a ng-href="tel:{{currentChoice.phone_number}}" class="item item-icon-left">
+        <i class="icon ion-iphone"></i>
+        {{currentChoice.phone_number}}
+      </a>
+        <a ng-href="{{googleMapsLink}}" target="_blank" class="item item-icon-left">
+          <i class="icon ion-home"></i>
+          {{currentChoice.address.street}}, {{currentChoice.address.city}}, {{currentChoice.address.state}}
+        </a>
+        <p ng-show="hours">Business Hours: {{hours}}</p>
+
+
+
+
+      <!--<div ng-repeat="tag in currentChoice.tags" class="item tabs tabs-secondary tabs-icon-left">-->
+        <!--<a class="tab-item" href="#">-->
+          <!--{{tag.name}}-->
+        <!--</a>-->
+
+      <!--</div>-->
+
     </div>
-    <img ng-src='{{currentChoice.image}}' width="250" height="250" ng-hide="!currentChoice.image"/>
+
     <div id="map" data-tap-disabled="true"></div>
     <button class="button button-full button-royal button-large" ng-click='back()'>
   		Back
