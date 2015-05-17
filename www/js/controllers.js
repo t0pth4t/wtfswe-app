@@ -2,26 +2,6 @@ angular.module('starter.controllers', [])
 
 
 .controller('WhatToEatCtrl',function($scope, $http, $ionicLoading,$location,$localstorage, $q, lodash,PlacesApi ) {
-        function shuffle(array) {
-            var currentIndex = array.length,
-                temporaryValue,
-                randomIndex;
-
-            // While there remain elements to shuffle...
-            while (0 !== currentIndex) {
-
-                // Pick a remaining element...
-                randomIndex = Math.floor(Math.random() * currentIndex);
-                currentIndex -= 1;
-
-                // And swap it with the current element.
-                temporaryValue = array[currentIndex];
-                array[currentIndex] = array[randomIndex];
-                array[randomIndex] = temporaryValue;
-            }
-
-            return array;
-        }
         $scope.getMeters = function (miles) {
             return miles * 1609.344;
         };
@@ -82,8 +62,9 @@ angular.module('starter.controllers', [])
             var choices = $localstorage.getObject('choices');
             if (choices.length === 0) {
                 choices = $localstorage.getObject('places').slice();
+                choices = $scope.filterChoices(choices);
             }
-            shuffle(choices);
+            lodash.shuffle(choices);
             var choice = choices.pop();
             $localstorage.setObject('choice', choice);
             $localstorage.setObject('choices', choices);
@@ -100,9 +81,27 @@ angular.module('starter.controllers', [])
                 $scope.selectedFoods.push(option);
             }
 
+            var choices = $localstorage.getObject('places').slice();
+            var filtered = $scope.filterChoices(choices);
+            $localstorage.setObject('choices', lodash.shuffle(filtered));
         };
 
-        var places = $localstorage.getObject('places');
+        $scope.filterChoices = function(choices){
+            if($scope.selectedFoods.length === 0){
+                return choices;
+            }
+
+
+            var filtered = lodash.map($scope.selectedFoods, function(food){
+                return lodash.filter(choices,
+                    function(location){
+                        return location.sample_categories.indexOf(food) !== -1;
+                    });
+            });
+            return lodash.flatten(filtered);
+
+        }
+
         $scope.distances = [
             {label: '5 miles', val: 5, id: 0},
             {label: '10 miles', val: 10, id: 1},
@@ -113,6 +112,8 @@ angular.module('starter.controllers', [])
         $scope.selected = $localstorage.getObject('distanceOption') || $scope.distances[1];
 
         $scope.getNewPlaces = false;
+
+        var places = $localstorage.getObject('places');
         if (!places || places.length === 0) {
             $scope.getPlaces($scope.selected);
         } else {
@@ -126,7 +127,7 @@ angular.module('starter.controllers', [])
         PlacesApi.getCityGridPlaceDetail($scope.currentChoice.id)
             .success(function (data) {
                 $scope.detail = data.locations[0];
-                if($scope.detail.contact_info){
+                if ($scope.detail.contact_info) {
                     $scope.displayUrl = $scope.detail.contact_info.display_url || null;
                 }
                 $scope.hours = $scope.detail.business_hours || null;
@@ -137,40 +138,37 @@ angular.module('starter.controllers', [])
         $scope.back = function () {
             $location.path('/whattoeat.html');
         };
-        function initialize() {
-            var myLatlng = new google.maps.LatLng($scope.currentChoice.latitude,$scope.currentChoice.longitude);
 
-            var mapOptions = {
-                center: myLatlng,
-                zoom: 16,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            var map = new google.maps.Map(document.getElementById("map"),
-                mapOptions);
+        var myLatlng = new google.maps.LatLng($scope.currentChoice.latitude, $scope.currentChoice.longitude);
+
+        var mapOptions = {
+            center: myLatlng,
+            zoom: 16,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map"),
+            mapOptions);
 
 
-            $scope.googleMapsLink = "geo:0,0?q=" +  $scope.currentChoice.address.street+", "+ $scope.currentChoice.address.city+", "+$scope.currentChoice.address.state+"";
-            var contentString = "<div><a href='"+$scope.googleMapsLink+"' target='_blank'>Driving Directions</a></div>";
-            var compiled = $compile(contentString)($scope);
+        $scope.googleMapsLink = "geo:0,0?q=" + $scope.currentChoice.address.street + ", " + $scope.currentChoice.address.city + ", " + $scope.currentChoice.address.state + "";
+        var contentString = "<div><a href='" + $scope.googleMapsLink + "' target='_blank'>Driving Directions</a></div>";
+        var compiled = $compile(contentString)($scope);
 
-            var infowindow = new google.maps.InfoWindow({
-                content: compiled[0]
-            });
+        var infowindow = new google.maps.InfoWindow({
+            content: compiled[0]
+        });
 
-            var marker = new google.maps.Marker({
-                position: myLatlng,
-                map: map,
-                title: $scope.currentChoice.name
-            });
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map,
+            title: $scope.currentChoice.name
+        });
 
-            google.maps.event.addListener(marker, 'click', function() {
-                infowindow.open(map,marker);
-            });
+        google.maps.event.addListener(marker, 'click', function () {
+            infowindow.open(map, marker);
+        });
 
-            $scope.map = map;
-        }
-
-        initialize();
+        $scope.map = map;
 
 
     });
