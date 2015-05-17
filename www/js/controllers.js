@@ -80,7 +80,7 @@ angular.module('starter.controllers', [])
             else {
                 $scope.selectedFoods.push(option);
             }
-
+            $localstorage.setObject('selectedFoods',$scope.selectedFoods);
             var choices = $localstorage.getObject('places').slice();
             var filtered = $scope.filterChoices(choices);
             $localstorage.setObject('choices', lodash.shuffle(filtered));
@@ -110,7 +110,7 @@ angular.module('starter.controllers', [])
         $scope.foodOptions = ['Chinese','Italian','Mexican','American'];
         $scope.selectedFoods = [];
         $scope.selected = $localstorage.getObject('distanceOption') || $scope.distances[1];
-
+        $scope.selectedFoods = $localstorage.getObject('selectedFoods') || [];
         $scope.getNewPlaces = false;
 
         var places = $localstorage.getObject('places');

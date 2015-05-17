@@ -33,7 +33,7 @@
                       type="checkbox"
                       name="selectedFoods[]"
                       value="{{option}}"
-                      ng-checked="selection.indexOf(option) > -1"
+                      ng-checked="selectedFoods.indexOf(option) !== -1"
                       ng-click="toggleSelection(option)"
                       >
                   <div class="track">
