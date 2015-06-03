@@ -1,6 +1,6 @@
 angular.module('starter.services', [])
 .constant('googleApiKey', '')
-.constant('cityGridApiKey', '')
+.constant('cityGridApiKey', '10000010458')
 .factory('PlacesApi', function($http, lodash, cityGridApiKey) {
 
   return {

@@ -12,10 +12,11 @@
         {{distanceOption}}
       <button class="button button-full button-royal button-large" ng-click='nextChoice()'>Nah, not today.</button>
       <div class="list">
-
+          <a class="button button-icon icon ion-location" ng-click="openModal()"></a>
           <label class="item item-input item-select">
+
           <div class="input-label">
-          Distance
+          How far?
           </div>
           <select ng-options="distance.label for distance in distances"
           ng-model="selected" ng-change="distanceChanged(selected)" ng-init="selected = distances[selected.id]"></select>

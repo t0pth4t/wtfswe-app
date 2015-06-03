@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
 
 
-.controller('WhatToEatCtrl',function($scope, $http, $ionicLoading,$location,$localstorage, $q, lodash,PlacesApi ) {
+.controller('WhatToEatCtrl',function($scope, $http, $ionicLoading,$ionicModal, $location,$localstorage, $q, lodash,PlacesApi ) {
         $scope.getMeters = function (miles) {
             return miles * 1609.344;
         };
@@ -101,6 +101,31 @@ angular.module('starter.controllers', [])
             return lodash.flatten(filtered);
 
         }
+
+        $ionicModal.fromTemplateUrl('/templates/modal.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.modal = modal;
+        });
+        $scope.openModal = function() {
+            $scope.modal.show();
+        };
+        $scope.closeModal = function() {
+            $scope.modal.hide();
+        };
+        //Cleanup the modal when we're done with it!
+        $scope.$on('$destroy', function() {
+            $scope.modal.remove();
+        });
+        // Execute action on hide modal
+        $scope.$on('modal.hidden', function() {
+            // Execute action
+        });
+        // Execute action on remove modal
+        $scope.$on('modal.removed', function() {
+            // Execute action
+        });
 
         $scope.distances = [
             {label: '5 miles', val: 5, id: 0},

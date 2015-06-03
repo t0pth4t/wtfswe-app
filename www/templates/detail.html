@@ -14,9 +14,8 @@
         <h2>{{currentChoice.name}}</h2>
 
 
-        <p><a href="{{displayUrl}}">{{displayUrl}}</a></p>
+        <p><a href="{{displayUrl}}" target="_blank">{{displayUrl}}</a></p>
       </div>
-
 
 
       <a ng-href="tel:{{currentChoice.phone_number}}" class="item item-icon-left">
@@ -29,15 +28,6 @@
         </a>
         <p ng-show="hours">Business Hours: {{hours}}</p>
 
-
-
-
-      <!--<div ng-repeat="tag in currentChoice.tags" class="item tabs tabs-secondary tabs-icon-left">-->
-        <!--<a class="tab-item" href="#">-->
-          <!--{{tag.name}}-->
-        <!--</a>-->
-
-      <!--</div>-->
 
     </div>
 
