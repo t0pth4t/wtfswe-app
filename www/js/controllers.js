@@ -3,7 +3,7 @@ angular.module('starter.controllers', [])
 
 .controller('WhatToEatCtrl',function($scope, $http, $ionicLoading,$ionicModal, $ionicPopover, $location,$localstorage, $q, lodash,PlacesApi ) {
 
-        $ionicPopover.fromTemplateUrl('/templates/options.html', {
+        $ionicPopover.fromTemplateUrl('templates/options.html', {
             scope: $scope
         }).then(function(popover) {
             $scope.popover = popover;
@@ -135,7 +135,7 @@ angular.module('starter.controllers', [])
 
         };
 
-        $ionicModal.fromTemplateUrl('/templates/modal.html', {
+        $ionicModal.fromTemplateUrl('templates/modal.html', {
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function(modal) {
