@@ -1,0 +1,38 @@
+<ion-popover-view>
+    <ion-header-bar>
+        <h1 class="title">Options</h1>
+    </ion-header-bar>
+    <ion-content>
+        <div class="list">
+
+
+            <label class="item item-input item-select">
+
+            <div class="input-label">
+                How far?
+            </div>
+            <select ng-options="distance.label for distance in distances"
+                    ng-model="selected" ng-change="distanceChanged(selected)" ng-init="selected = distances[selected.id]"></select>
+        </label>
+
+        </div>
+
+
+
+        <ul class="list">
+            <li class="item item-checkbox" ng-repeat="option in foodOptions">
+                {{option}}
+                <label class="checkbox checkbox-royal">
+                    <input
+                            type="checkbox"
+                            name="selectedFoods[]"
+                            value="{{option}}"
+                            ng-checked="selectedFoods.indexOf(option) !== -1"
+                            ng-click="toggleSelection(option)"
+                            >
+
+                </label>
+            </li>
+        </ul>
+    </ion-content>
+</ion-popover-view>

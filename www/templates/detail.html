@@ -1,6 +1,6 @@
-    <ion-pane>
+    <ion-view>
       <ion-header-bar class="bar-royal">
-        <h1 class="title">Where the F*** Should We Eat?!?!</h1>
+        <h1 class="title">WTFSWE?!?!</h1>
       </ion-header-bar>
   <ion-content class="has-header padding content-color">
 
@@ -32,8 +32,9 @@
     </div>
 
     <div id="map" data-tap-disabled="true"></div>
-    <button class="button button-full button-royal button-large" ng-click='back()'>
-  		Back
-	</button>
+
   </ion-content>
-</ion-pane>
+      <ion-footer-bar class="bar-royal tabs">    <a class="tab-item" ng-click='back()'>
+        Back
+      </a></ion-footer-bar>
+</ion-view>

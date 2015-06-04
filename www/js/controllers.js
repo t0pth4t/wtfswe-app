@@ -1,7 +1,32 @@
 angular.module('starter.controllers', [])
 
 
-.controller('WhatToEatCtrl',function($scope, $http, $ionicLoading,$ionicModal, $location,$localstorage, $q, lodash,PlacesApi ) {
+.controller('WhatToEatCtrl',function($scope, $http, $ionicLoading,$ionicModal, $ionicPopover, $location,$localstorage, $q, lodash,PlacesApi ) {
+
+        $ionicPopover.fromTemplateUrl('/templates/options.html', {
+            scope: $scope
+        }).then(function(popover) {
+            $scope.popover = popover;
+        });
+        $scope.openPopover = function($event) {
+            $scope.popover.show($event);
+        };
+        $scope.closePopover = function() {
+            $scope.popover.hide();
+        };
+        //Cleanup the popover when we're done with it!
+        $scope.$on('$destroy', function() {
+            $scope.popover.remove();
+        });
+        // Execute action on hide popover
+        $scope.$on('popover.hidden', function() {
+            // Execute action
+        });
+        // Execute action on remove popover
+        $scope.$on('popover.removed', function() {
+            // Execute action
+        });
+
         $scope.getMeters = function (miles) {
             return miles * 1609.344;
         };
@@ -31,12 +56,20 @@ angular.module('starter.controllers', [])
             $scope.choice = $scope.getNextChoice();
         };
 
+        function getGeolocationCoordinates() {
+            var deferred = $q.defer();
+            navigator.geolocation.getCurrentPosition(
+                function(position) { deferred.resolve(position.coords); },
+                function(error) { deferred.resolve(null); }
+            );
+            return deferred.promise;
+        }
+
         $scope.getPlaces = function (miles) {
             $scope.showLoading();
-            navigator.geolocation.getCurrentPosition(function (pos) {
-
-                var lat = pos.coords.latitude,
-                    long = pos.coords.longitude;
+            getGeolocationCoordinates().then(function(coords){
+                var lat = coords.latitude,
+                    long = coords.longitude;
 
                 var results = PlacesApi.getCityGridPlaces(lat, long, miles);
                 $q.all(results).then(function (data) {
@@ -52,7 +85,7 @@ angular.module('starter.controllers', [])
                     alert('Unable to get restaurants!');
                     console.log(error);
                 });
-            }, function (error) {
+            }).catch(function(error){
                 $scope.hide();
                 alert('Unable to get location: ' + error.message);
             });
@@ -100,7 +133,7 @@ angular.module('starter.controllers', [])
             });
             return lodash.flatten(filtered);
 
-        }
+        };
 
         $ionicModal.fromTemplateUrl('/templates/modal.html', {
             scope: $scope,

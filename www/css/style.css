@@ -1,14 +1,27 @@
-/* Empty. Add your own CSS if you like */
+@font-face {
+	font-family: "AltRenShadow";
+	src: url("Aventura-Bold.otf");
+}
+
 .main-content h1,
 .main-content h2,
 .main-content h3,
 .main-content a{
-	color: #D2C6FB;
+
 	text-align: center;
+	font-family: 'AltRenShadow', cursive;
 }
 
 .content-color {
-	background: #522CCA;
+	background: #3E3645;
+}
+.choice{font-size:70px;}
+.choice a{
+	color: #D8E4B2;
+
+}
+.how-about{
+	color:#D75943;
 }
 
 #map {

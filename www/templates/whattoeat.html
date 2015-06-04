@@ -1,49 +1,17 @@
 <ion-pane>
   <ion-header-bar class="bar-royal">
-    <h1 class="title">Where the F*** Should We Eat?!?!</h1>
+    <h1 class="title">WTFSWE?!?!</h1>
+      <a class="button button-icon icon ion-more" ng-click="openPopover($event)"></a>
+      <a class="button button-icon icon ion-location" ng-click="openModal()"></a>
   </ion-header-bar>
 
   <ion-content class="has-header padding content-color">
     <div class="main-content">
-      <h2 class="choice">How about <a href="#detail">{{choice.name}}?</a></h2>
+      <h2 class="choice"><div class="how-about">How about</div> <a nav-direction="forward" href="#detail">{{choice.name}}?</a></h2>
 
-      <!--<h3>{{choice.address.street}}, {{choice.address.city}}</h3>-->
-      <!--<h3 ng-hide="!choice.rating">Rating: {{choice.rating}}</h3>-->
-        {{distanceOption}}
-      <button class="button button-full button-royal button-large" ng-click='nextChoice()'>Nah, not today.</button>
-      <div class="list">
-          <a class="button button-icon icon ion-location" ng-click="openModal()"></a>
-          <label class="item item-input item-select">
-
-          <div class="input-label">
-          How far?
-          </div>
-          <select ng-options="distance.label for distance in distances"
-          ng-model="selected" ng-change="distanceChanged(selected)" ng-init="selected = distances[selected.id]"></select>
-          </label>
-
-      </div>
-      <h3>We're feelin' like...</h3>
-
-
-          <ul class="list">
-          <li class="item item-toggle" ng-repeat="option in foodOptions">
-              {{option}}
-              <label class="toggle toggle-royal">
-              <input
-                      type="checkbox"
-                      name="selectedFoods[]"
-                      value="{{option}}"
-                      ng-checked="selectedFoods.indexOf(option) !== -1"
-                      ng-click="toggleSelection(option)"
-                      >
-                  <div class="track">
-                      <div class="handle"></div>
-                  </div>
-              </label>
-          </li>
-          </ul>
       <ion-refresher pulling-text="Pull to refresh..." on-refresh="getPlaces()"></ion-refresher>
     </div>
   </ion-content>
+    <ion-footer-bar class="bar-royal tabs"><a class="tab-item " ng-click='nextChoice()'>Nah, not today.</a></ion-footer-bar>
+
 </ion-pane>
