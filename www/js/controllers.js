@@ -14,17 +14,8 @@ angular.module('starter.controllers', [])
         $scope.closePopover = function() {
             $scope.popover.hide();
         };
-        //Cleanup the popover when we're done with it!
         $scope.$on('$destroy', function() {
             $scope.popover.remove();
-        });
-        // Execute action on hide popover
-        $scope.$on('popover.hidden', function() {
-            // Execute action
-        });
-        // Execute action on remove popover
-        $scope.$on('popover.removed', function() {
-            // Execute action
         });
 
         $scope.getMeters = function (miles) {
@@ -60,35 +51,51 @@ angular.module('starter.controllers', [])
             var deferred = $q.defer();
             navigator.geolocation.getCurrentPosition(
                 function(position) { deferred.resolve(position.coords); },
-                function(error) { deferred.resolve(null); }
+                function() { deferred.resolve(null); }
             );
             return deferred.promise;
         }
 
-        $scope.getPlaces = function (miles) {
-            $scope.showLoading();
-            getGeolocationCoordinates().then(function(coords){
+        function callCityGridAPI(coords, miles, myLocation){
+            var results;
+            if(myLocation){
+                results = lodash.isNumber(myLocation) && lodash.isFinite(myLocation) ? PlacesApi.getCityGridPlacesZip(myLocation) : PlacesApi.getCityGridPlacesCityState(myLocation);
+            }
+            else{
+                console.log(myLocation);
                 var lat = coords.latitude,
                     long = coords.longitude;
 
-                var results = PlacesApi.getCityGridPlaces(lat, long, miles);
-                $q.all(results).then(function (data) {
-                    $scope.hide();
-                    var places = lodash.flatten(lodash.map(data, function (d) {
-                        return d.data.results.locations;
-                    }));
-                    $localstorage.setObject('places', places);
-                    $localstorage.setObject('choices', places.slice());
-                    $scope.choice = $scope.getNextChoice();
-                }, function (error) {
-                    $scope.hide();
-                    alert('Unable to get restaurants!');
-                    console.log(error);
-                });
-            }).catch(function(error){
+                results = PlacesApi.getCityGridPlaces(lat, long, miles);
+            }
+            $q.all(results).then(function (data) {
                 $scope.hide();
-                alert('Unable to get location: ' + error.message);
+                var locations = lodash.flatten(lodash.map(data, function (d) {
+                    return d.data.results.locations;
+                }));
+                $localstorage.setObject('places', locations);
+                $localstorage.setObject('choices', locations.slice());
+                $scope.choice = $scope.getNextChoice();
+            }, function (error) {
+                $scope.hide();
+                alert('Unable to get restaurants!');
+                console.log(error);
             });
+        }
+
+        $scope.getPlaces = function (miles) {
+            $scope.showLoading();
+            if($scope.myLocation){
+                callCityGridAPI(null,null,$scope.myLocation)
+            }
+            else{
+                getGeolocationCoordinates()
+                .then(function(coords){callCityGridAPI(coords, miles)})
+                .catch(function(error){
+                    $scope.hide();
+                    alert('Unable to get location: ' + error.message);
+                });
+            }
         };
 
         $scope.getNextChoice = function () {
@@ -124,7 +131,6 @@ angular.module('starter.controllers', [])
                 return choices;
             }
 
-
             var filtered = lodash.map($scope.selectedFoods, function(food){
                 return lodash.filter(choices,
                     function(location){
@@ -132,7 +138,6 @@ angular.module('starter.controllers', [])
                     });
             });
             return lodash.flatten(filtered);
-
         };
 
         $ionicModal.fromTemplateUrl('templates/modal.html', {
@@ -144,7 +149,11 @@ angular.module('starter.controllers', [])
         $scope.openModal = function() {
             $scope.modal.show();
         };
-        $scope.closeModal = function() {
+        $scope.closeModal = function(useCurrent, cityState, zipCode) {
+            if(useCurrent){
+                $scope.myLocation = null;
+            }
+            $scope.myLocation = cityState || zipCode;
             $scope.modal.hide();
         };
         //Cleanup the modal when we're done with it!
@@ -159,7 +168,7 @@ angular.module('starter.controllers', [])
         $scope.$on('modal.removed', function() {
             // Execute action
         });
-
+        $scope.myLocation = null;
         $scope.distances = [
             {label: '5 miles', val: 5, id: 0},
             {label: '10 miles', val: 10, id: 1},

@@ -9000,12 +9000,12 @@ a.button {
   transition: none !important; }
 
 @font-face {
-  font-family: "MenschInline";
-  src: url("mensch-inline.ttf"); }
+  font-family: "BushcraftDistress";
+  src: url("distress.otf"); }
 
 .main-content h1, .main-content h2, .main-content h3, .main-content a {
   text-align: center;
-  font-family: 'MenschInline', cursive; }
+  font-family: 'BushcraftDistress', cursive; }
 
 .title {
   font-size: 5vw;

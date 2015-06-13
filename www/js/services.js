@@ -1,6 +1,6 @@
 angular.module('starter.services', [])
 .constant('googleApiKey', '')
-.constant('cityGridApiKey', '10000010458')
+.constant('cityGridApiKey', '')
 .factory('PlacesApi', function($http, lodash, cityGridApiKey) {
 
   return {
@@ -12,6 +12,16 @@ angular.module('starter.services', [])
       radius = radius || 10;
       return lodash.map([1,2],function(page){
         return $http.get('https://api.citygridmedia.com/content/places/v2/search/latlon?format=json&rpp=50&type=restaurant&lat='+lat+'&lon='+long+'&radius='+radius+'&publisher='+cityGridApiKey+'&page='+page+'&sort=highestrated');
+      });
+    },
+    getCityGridPlacesZip: function(zipcode) {
+      return lodash.map([1,2],function(page){
+        return $http.get('https://api.citygridmedia.com/content/places/v2/search/where?format=json&rpp=50&type=restaurant&where='+zipcode+'&publisher='+cityGridApiKey+'&page='+page+'&sort=highestrated');
+      });
+    },
+    getCityGridPlacesCityState: function(cityState) {
+      return lodash.map([1,2],function(page){
+        return $http.get('https://api.citygridmedia.com/content/places/v2/search/where?format=json&rpp=50&type=restaurant&where='+cityState+'&publisher='+cityGridApiKey+'&page='+page+'&sort=highestrated');
       });
     },
     getCityGridPlaceDetail: function(placeId){

@@ -24,15 +24,15 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 @import "www/lib/ionic/scss/ionic";
 
 @font-face {
-  font-family: "MenschInline";
-  src: url("mensch-inline.ttf");
+  font-family: "BushcraftDistress";
+  src: url("distress.otf");
 }
 
 
 .main-content {
   h1, h2, h3, a {
     text-align: center;
-    font-family: 'MenschInline', cursive;
+    font-family: 'BushcraftDistress', cursive;
   }
 }
 
