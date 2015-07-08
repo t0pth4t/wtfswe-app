@@ -59,10 +59,9 @@ angular.module('starter.controllers', [])
         function callCityGridAPI(coords, miles, myLocation){
             var results;
             if(myLocation){
-                results = lodash.isNumber(myLocation) && lodash.isFinite(myLocation) ? PlacesApi.getCityGridPlacesZip(myLocation) : PlacesApi.getCityGridPlacesCityState(myLocation);
+                results = PlacesApi.getCityGridPlacesWhere(myLocation);
             }
             else{
-                console.log(myLocation);
                 var lat = coords.latitude,
                     long = coords.longitude;
 
@@ -147,7 +146,14 @@ angular.module('starter.controllers', [])
             $scope.modal = modal;
         });
         $scope.openModal = function() {
+            if(lodash.isNumber($scope.myLocation)){
+                $scope.zipCode = $scope.myLocation;
+            }
+            else if($scope.myLocation){
+                $scope.cityState = $scope.myLocation;
+            }
             $scope.modal.show();
+
         };
         $scope.closeModal = function(useCurrent, cityState, zipCode) {
             if(useCurrent){
@@ -155,19 +161,16 @@ angular.module('starter.controllers', [])
             }
             $scope.myLocation = cityState || zipCode;
             $scope.modal.hide();
+            if(useCurrent || cityState || zipCode){
+                $scope.getPlaces()
+            }
+
         };
-        //Cleanup the modal when we're done with it!
+
         $scope.$on('$destroy', function() {
             $scope.modal.remove();
         });
-        // Execute action on hide modal
-        $scope.$on('modal.hidden', function() {
-            // Execute action
-        });
-        // Execute action on remove modal
-        $scope.$on('modal.removed', function() {
-            // Execute action
-        });
+
         $scope.myLocation = null;
         $scope.distances = [
             {label: '5 miles', val: 5, id: 0},
@@ -218,7 +221,7 @@ angular.module('starter.controllers', [])
 
 
         $scope.googleMapsLink = "geo:0,0?q=" + $scope.currentChoice.address.street + ", " + $scope.currentChoice.address.city + ", " + $scope.currentChoice.address.state + "";
-        var contentString = "<div><a href='" + $scope.googleMapsLink + "' target='_blank'>Driving Directions</a></div>";
+        var contentString = "<div><a href='" + $scope.googleMapsLink + "' target='_system'>Driving Directions</a></div>";
         var compiled = $compile(contentString)($scope);
 
         var infowindow = new google.maps.InfoWindow({
@@ -236,6 +239,4 @@ angular.module('starter.controllers', [])
         });
 
         $scope.map = map;
-
-
     });
